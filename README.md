@@ -14,8 +14,9 @@ In order to get paid for 1 night of work
 I want to calculate my nightly charge
 
 ## Testing Setup / Framework
-Tests were conducted using Java (JDK) 9.0.1 using Apache Maven 3.1.1
-Be sure to have a version of Maven 3.1 or greater on your windows machine to enable testing
+Tests were conducted using Java (JDK) 9.0.1 using Apache Maven 3.1.1 with jasmine-maven-plugin
+Version of Maven 3.1 or greater on your Windows machine must be configured to enable testing
 Once this project is downloaded and you have confirmed your version of maven with a command line prompt "mvn -v", 
 double-click on the jasmine.bat file to enable the Jasmine Spec Runner listener.
 Next, open up this local URL http://localhost:8234/ to view test results.
+
