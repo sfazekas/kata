@@ -1,3 +1,29 @@
+describe("Given a namespace 'utils'", function () {
+	it("should exist", function () {
+		expect(utils).toBeDefined();
+	});
+
+	describe("should contain a method called", function () {
+		describe("'isDate', where when called", function () {
+			var returnVal;
+			
+			beforeEach(function () {
+				isDateSpy = spyOn(utils, "isDate").and.callThrough();
+			});
+
+			it("should return true, when parameter is a valid date", function () {
+				returnVal = utils.isDate('2018-01-25 17:01:01')
+				expect(returnVal).toBe(true);
+			});
+
+			it("should return false, when parameter is NOT a valid date", function () {
+				returnVal = utils.isDate('abcdef');
+				expect(returnVal).toBe(false);
+			});
+		});
+	});
+});
+
 describe("Given a namespace 'babySitter'", function () {
 
 	it("should exist", function () {
