@@ -23,6 +23,32 @@ describe("Given a namespace 'utils'", function () {
 				expect(returnVal).toBe(false);
 			});
 		});
+		describe("'response', where when called", function () {
+			
+			beforeEach(function () {
+				responseSpy = spyOn(utils, "response").and.callThrough();
+			});
+			
+			describe("will accept an output (string) parameter", function () {
+				var getElementByIdSpy, output = "This is my response text";
+				
+				beforeEach(function () {
+					getElementByIdSpy = spyOn(document, "getElementById").and.callThrough();
+					utils.response(output)
+				});
+
+				it("should find id = 'response' in the DOM", function () {
+					expect(getElementByIdSpy).toHaveBeenCalledWith('response')
+				});
+				
+				it("should update the 'output' to the DOM", function () {
+					var responseObj = document.getElementById('response');
+					expect(responseObj.innerHTML).toEqual(output)
+				});
+				
+			});
+			
+		});
 	});
 });
 
@@ -59,10 +85,27 @@ describe("Given a namespace 'babySitter'", function () {
 				});
 				
 				describe("will check each parameter for date validity", function () {
-					it("should loop through the validity check 3 times", function () {
-						babySitter.hoursWorked('2018-01-25 17:01:01','2018-01-25 17:01:01','2018-01-25 17:01:01');
-						expect(isDateSpy).toHaveBeenCalledTimes(3)
+					describe("when timeIn and timeOut are provided", function () {
+						it("should loop through the validity check 2 times", function () {
+							babySitter.hoursWorked('2018-01-25 17:01:01','2018-01-25 17:01:01');
+							expect(isDateSpy).toHaveBeenCalledTimes(2)
+						});
 					});
+
+					describe("when timeIn and timeOut are provided, while bedTime is '' (empty)", function () {
+						it("should loop through the validity check 3 times", function () {
+							babySitter.hoursWorked('2018-01-25 17:01:01','2018-01-25 17:01:01','');
+							expect(isDateSpy).toHaveBeenCalledTimes(3)
+						});
+					});
+
+					describe("when timeIn, timeOut, and bedTime are provided", function () {
+						it("should loop through the validity check 3 times", function () {
+							babySitter.hoursWorked('2018-01-25 17:01:01','2018-01-25 17:01:01','2018-01-25 17:01:01');
+							expect(isDateSpy).toHaveBeenCalledTimes(3)
+						});
+					});
+
 				});
 				
 			});
