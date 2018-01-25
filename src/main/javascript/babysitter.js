@@ -16,6 +16,11 @@ var utils = {
 };
 
 var babySitter = {
+	"rates" : {
+		"beforeBedTime": 12,
+		"bedTimeToMidnight": 8,
+		"midnightToEnd": 16
+	},
 	"hoursWorked" : function (timeIn, timeOut, bedTime) {
 		if (bedTime == '') {bedTime = null}; // bedTime could be optional
 		var args = arguments;
@@ -25,13 +30,20 @@ var babySitter = {
 				return false;
 			}
 		};
-		
+
 		if (timeIn > timeOut) {
 			var responseText = "Your Times are incorrect - your START Time " + timeIn + " is greater than your FINISHED time " + timeOut;
 			utils.response(responseText);
 			return false;
-		}
+		};
 		
+		return babySitter.payment(timeIn, timeOut, bedTime);
+	},
+
+	"payment": function (timeIn, timeOut, bedTime) {
 
 	}
 };
+
+
+
