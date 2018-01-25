@@ -1,3 +1,5 @@
+var isDateSpy;
+
 describe("Given a namespace 'utils'", function () {
 	it("should exist", function () {
 		expect(utils).toBeDefined();
@@ -39,14 +41,32 @@ describe("Given a namespace 'babySitter'", function () {
 				timeOut = '2018-01-26 03:01:01', 
 				bedTime = '2018-01-25 20:00:00';
 			
-			beforeEach(function () {
-				hoursWorkedSpy = spyOn(babySitter, "hoursWorked");
+			describe("accepts three 'date/time' parameters", function () {
+				beforeEach(function () {
+					hoursWorkedSpy = spyOn(babySitter, "hoursWorked");
+				});
+			
+				it("should recieve: timeIn, timeOut, bedTime", function () {
+					babySitter.hoursWorked(timeIn, timeOut, bedTime)
+					expect(hoursWorkedSpy).toHaveBeenCalledWith(timeIn, timeOut, bedTime);
+				});
 			});
 			
-			it("should accept parameters: timeIn, timeOut, bedTime", function () {
-				babySitter.hoursWorked(timeIn, timeOut, bedTime)
-				expect(hoursWorkedSpy).toHaveBeenCalledWith(timeIn, timeOut, bedTime);
+			describe("when the 'date/time' based parameters are accepted", function () {
+				beforeEach(function () {
+					hoursWorkedSpy = spyOn(babySitter, "hoursWorked").and.callThrough();
+					isDateSpy = spyOn(utils, "isDate").and.callThrough();
+				});
+				
+				describe("will check each parameter for date validity", function () {
+					it("should loop through the validity check 3 times", function () {
+						babySitter.hoursWorked('2018-01-25 17:01:01','2018-01-25 17:01:01','2018-01-25 17:01:01');
+						expect(isDateSpy).toHaveBeenCalledTimes(3)
+					});
+				});
+				
 			});
+			
 		});
 
 	
