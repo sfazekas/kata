@@ -108,6 +108,36 @@ describe("Given a namespace 'babySitter'", function () {
 
 				});
 				
+				describe("will check to make sure 'timeIn' is not after 'timeOut'", function () {
+					var responseSpy, responseText, IN, OUT;
+
+					beforeEach(function () {
+						responseSpy = spyOn(utils, "response");
+					});
+						
+					describe("when 'timeIn' greater than 'timeOut'", function () {
+						IN = '2018-01-26 17:01:01'; 
+						OUT = '2018-01-26 03:01:01';
+						responseText = "Your Times are incorrect - your START Time " + IN + " is greater than your FINISHED time " + OUT;
+
+						it("should send a message to the util.reponse method", function () {
+							babySitter.hoursWorked(IN, OUT);
+							expect(responseSpy).toHaveBeenCalledWith(responseText)
+						});
+					});
+
+					describe("when 'timeIn' is less than 'timeOut'", function () {
+						var START = '2018-01-25 17:01:01'; 
+								END = '2018-01-26 03:01:01';
+						
+						it("should NOT send a message to the util.reponse method", function () {
+							babySitter.hoursWorked(START, END);
+							expect(responseSpy).not.toHaveBeenCalled();
+						});
+					});
+					
+				});
+				
 			});
 			
 		});

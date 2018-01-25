@@ -27,7 +27,8 @@ var babySitter = {
 		};
 		
 		if (timeIn > timeOut) {
-			utils.response("Your Times are incorrect - your START Time " + timeIn + " is greater than your FINISHED time " + timeOut)
+			var responseText = "Your Times are incorrect - your START Time " + timeIn + " is greater than your FINISHED time " + timeOut;
+			utils.response(responseText);
 			return false;
 		}
 		
