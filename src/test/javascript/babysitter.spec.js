@@ -68,6 +68,7 @@ describe("Given a namespace 'babySitter'", function () {
 				bedTime = '2018-01-25 20:00:00';
 			
 			describe("accepts three 'date/time' parameters", function () {
+				
 				beforeEach(function () {
 					hoursWorkedSpy = spyOn(babySitter, "hoursWorked");
 				});
@@ -80,7 +81,7 @@ describe("Given a namespace 'babySitter'", function () {
 			
 			describe("when the 'date/time' based parameters are passed in", function () {
 				beforeEach(function () {
-					hoursWorkedSpy = spyOn(babySitter, "hoursWorked").and.callThrough();
+					//hoursWorkedSpy = spyOn(babySitter, "hoursWorked").and.callThrough();
 					isDateSpy = spyOn(utils, "isDate").and.callThrough();
 				});
 				
@@ -150,13 +151,32 @@ describe("Given a namespace 'babySitter'", function () {
 						 expect(amount).toEqual(1);
 					});
 				});
-				
-				
-				
+
 			});
 			
 		});
 
-	
+
+
+		describe("'payment', where when called", function () {
+			var timeIn, timeOut, bedTime, amount;
+
+			describe("accepts three 'date/time' parameters 'timeIn, timeOut, bedTime'", function () {	
+				describe("when the 'timeIn' is after 'midNight'", function () {
+					
+					beforeEach(function () {
+						timeIn = '2018-01-25 01:01:01'
+						timeOut = '2018-01-25 03:01:00'
+						bedTime = ''
+					});
+					
+					it("should calculate the payment based on 'midnight to finish'", function () {
+						amount = babySitter.payment(timeIn, timeOut, bedTime);
+						expect(amount).toEqual(16);
+					});
+				});
+			});
+			
+		});
 	});
 });
