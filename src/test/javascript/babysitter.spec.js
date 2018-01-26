@@ -81,7 +81,6 @@ describe("Given a namespace 'babySitter'", function () {
 			
 			describe("when the 'date/time' based parameters are passed in", function () {
 				beforeEach(function () {
-					//hoursWorkedSpy = spyOn(babySitter, "hoursWorked").and.callThrough();
 					isDateSpy = spyOn(utils, "isDate").and.callThrough();
 				});
 				
@@ -139,12 +138,37 @@ describe("Given a namespace 'babySitter'", function () {
 					
 				});
 				
+				describe("will check to make sure 'timeIn' and 'timeOut' are within '5pm' and '4am'", function () {
+					var responseSpy, amt,
+						responseText = "Your Times entered must not be before 5:00 PM or later than 4:00 AM.";
+					
+					beforeEach(function () {
+						responseSpy = spyOn(utils, "response");
+					});
+					
+					describe("when 'timeIn' is less than 5:00pm", function () {
+						it("should provide a response message and return 0", function () {
+							amt = babySitter.hoursWorked('2018-01-25 16:01:01','2018-01-25 23:59:01','');
+							expect(amt).toEqual(0);
+							expect(responseSpy).toHaveBeenCalledWith(responseText);
+						});
+					});
+
+					describe("when 'timeOut' is greater than 4:00am", function () {
+						it("should provide a response message and return 0", function () {
+							amt = babySitter.hoursWorked('2018-01-25 23:01:01','2018-01-26 06:59:01','2018-01-25 22:01:00');
+							expect(amt).toEqual(0);
+							expect(responseSpy).toHaveBeenCalledWith(responseText);
+						});
+					});
+				});
+				
 				describe("will call the 'payment' method with 'timeIn, timeOut, bedTime' parameters", function () {
 					var paymentSpy, amount;
 					
 					beforeEach(function () {
 						paymentSpy = spyOn(babySitter, "payment").and.returnValue(1);
-						amount = babySitter.hoursWorked('2018-01-25 01:01:01','2018-01-25 03:01:01','');
+						amount = babySitter.hoursWorked('2018-01-25 18:01:01','2018-01-26 03:01:01','');
 					});
 
 					it("should return the 'payment' amount", function () {

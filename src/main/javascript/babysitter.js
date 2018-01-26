@@ -36,10 +36,25 @@ var babySitter = {
 			utils.response(responseText);
 			return 0;
 		};
+
+		var bedTimeNum = 0,
+			timeInNum = new Date(timeIn).getTime(),
+			midnightTimeNum = new Date(new Date(timeIn).setHours(24,0,0,0)).getTime(),
+			timeOutNum = new Date(timeOut).getTime(),
+			earlyTimeNum = new Date(new Date(timeIn).setHours(17,0,0,0)).getTime(),
+			lateTimeNum = new Date(new Date(midnightTimeNum).setHours(4,0,0,0)).getTime();
+	
+		if (bedTime != null) {
+			bedTimeNum = new Date(bedTime).getTime();
+		};
+
+		if (timeInNum < earlyTimeNum || timeOutNum > lateTimeNum) {
+			var responseText = "Your Times entered must not be before 5:00 PM or later than 4:00 AM.";
+			utils.response(responseText);
+			return 0;
+		};
 		
-		// TODO: add constraint for timeIn < 17:00:00
-		// TODO: add constraint for timeOut > 04:00:00
-		
+		// TODO: change params to use "Num" values 
 		return babySitter.payment(timeIn, timeOut, bedTime);
 	},
 	
@@ -53,6 +68,7 @@ var babySitter = {
 	},
 
 	"payment": function (timeIn, timeOut, bedTime) {
+		// TODO: use params as numeric, requires changing all tests to use numeric
 		var payment = 0,
 			bedTimeNum = 0,
 			responseText = '',
