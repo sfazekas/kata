@@ -157,24 +157,102 @@ describe("Given a namespace 'babySitter'", function () {
 		});
 
 
+		describe("'retHours', where when called", function () {
+			describe("accepts numeric 'time' parameters [laterTime, earlierTime]", function () {
+				var laterTime, earlierTime, hours;
+				
+				describe("when the difference (laterTime - earlierTime))", function () {
+					describe("is less than or equals zero (0)", function () {
+						it("should return 0", function () {
+							laterTime = 6;
+							earlierTime = 7;
+							hours = babySitter.retHours(laterTime, earlierTime);
+							expect(hours).toEqual(0);
+						});
+					});
+				
+					describe("greater than 0", function () {
+						it("should return the number of hours (based on number of seconds)", function () {
+							laterTime = 1516935660000;
+							earlierTime = 1516917661000;
+							hours = babySitter.retHours(laterTime, earlierTime);
+							expect(hours).toEqual(4);
+						});
+					});
+				});
+			});
+		});
 
 		describe("'payment', where when called", function () {
 			var timeIn, timeOut, bedTime, amount;
 
-			describe("accepts three 'date/time' parameters 'timeIn, timeOut, bedTime'", function () {	
-				describe("when the 'timeIn' is after 'midNight'", function () {
+			describe("accepts three 'date/time' parameters 'timeIn, timeOut, bedTime'", function () {
+
+				describe("when 'bedTime' is AFTER 'timeIn' (and timeIn before midnight)", function () {
+					beforeEach(function () {
+						timeIn = '2018-01-25 17:01:01'
+						bedTime = '2018-01-25 23:01:00'
+						timeOut = '2018-01-26 03:01:01'
+					});
 					
+					it("should calculate the payment to be '108'", function () {
+						amount = babySitter.payment(timeIn, timeOut, bedTime);
+						expect(amount).toEqual(108);
+					});
+				});
+
+				describe("when 'bedTime' is AFTER 'timeIn' and 'timeOut' is before 'midnight'", function () {
+					beforeEach(function () {
+						timeIn = '2018-01-25 17:01:01'
+						bedTime = '2018-01-25 22:01:00'
+						timeOut = '2018-01-25 23:59:01'
+					});
+					
+					it("should calculate the payment to be '56'", function () {
+						amount = babySitter.payment(timeIn, timeOut, bedTime);
+						expect(amount).toEqual(56);
+					});
+				});
+
+				describe("when 'bedTime' is BEFORE 'timeIn'", function () {
+					beforeEach(function () {
+						timeIn = '2018-01-25 17:01:01'
+						bedTime = '2018-01-25 17:00:00'
+						timeOut = '2018-01-26 03:01:01'
+					});
+					
+					it("should calculate the payment to be '96'", function () {
+						amount = babySitter.payment(timeIn, timeOut, bedTime);
+						expect(amount).toEqual(96);
+					});
+				});
+
+				describe("when 'bedTime' is BEFORE 'timeIn' and 'timeOut' is BEFORE 'midNight'", function () {
+					beforeEach(function () {
+						timeIn = '2018-01-25 17:01:01'
+						bedTime = '2018-01-25 22:01:00'
+						timeOut = '2018-01-25 23:59:01'
+					});
+					
+					it("should calculate the payment to be '56'", function () {
+						amount = babySitter.payment(timeIn, timeOut, bedTime);
+						expect(amount).toEqual(56);
+					});
+				});
+
+				describe("when 'timeIn' is AFTER 'midNight'", function () {
 					beforeEach(function () {
 						timeIn = '2018-01-25 01:01:01'
 						timeOut = '2018-01-25 03:01:00'
-						bedTime = ''
+						bedTime = null
 					});
 					
-					it("should calculate the payment based on 'midnight to finish'", function () {
+					it("should calculate the payment to be '16'", function () {
 						amount = babySitter.payment(timeIn, timeOut, bedTime);
 						expect(amount).toEqual(16);
 					});
 				});
+
 			});
 			
 		});
